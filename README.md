@@ -23,9 +23,9 @@ Demo users (mock only):
 | Brian Abbott | (912)555-0100 | 123456 |
 | Eddie Morris | (912)555-0142 | 654321 |
 
-## Deploy (Cloudflare Pages)
+## Deploy (Cloudflare)
 
-Build command `npx expo export -p web`, output directory `dist`. `public/_redirects` provides the single-page-app fallback.
+Build command `npx expo export -p web`, deploy command `npx wrangler deploy`. `wrangler.jsonc` serves `dist/` as static assets and sets `not_found_handling: "single-page-application"` so deep links such as `/addresses` fall back to `index.html`. (A `public/_redirects` with `/* /index.html 200` is rejected by Cloudflare as an infinite loop; do not add one.)
 
 ## Notes
 
