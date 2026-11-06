@@ -14,7 +14,10 @@
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
       "predictiveBackGestureEnabled": false,
-      "package": "com.cuinc.liftstation"
+      "package": "com.cuinc.liftstation",
+      "runtimeVersion": {
+        "policy": "fingerprint"
+      }
     },
     "web": {
       "output": "static",
@@ -46,6 +49,9 @@
         "projectId": "15d2ff17-3c60-4aaa-b270-462ae1257ed3"
       }
     },
-    "owner": "pizn-01"
+    "owner": "pizn-01",
+    "updates": {
+      "url": "https://u.expo.dev/15d2ff17-3c60-4aaa-b270-462ae1257ed3"
+    }
   }
 }
