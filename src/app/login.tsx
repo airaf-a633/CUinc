@@ -1,22 +1,24 @@
-import { router } from 'expo-router';
+import { Redirect, router } from 'expo-router';
 import { useState } from 'react';
 import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { DropletLogo } from '@/components/icons';
 import { Field, PrimaryButton, TopInset, text } from '@/components/ui';
-import { formatPhone } from '@/data/format';
+import { formatPhone, nationalDigits } from '@/data/format';
 import { repository } from '@/data/repository';
+import { useAuth } from '@/state/auth';
 import { setPendingPhone } from '@/state/pendingPhone';
 import { colors, layout } from '@/theme/tokens';
 
 export default function Login() {
+  const { user } = useAuth();
   const [phone, setPhone] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
   async function submit() {
     if (busy) return;
-    const digits = phone.replace(/\D/g, '');
+    const digits = nationalDigits(phone);
     if (digits.length !== 10) {
       setError('Enter a 10-digit phone number'); // not in the designs: our validation message
       return;
@@ -32,6 +34,8 @@ export default function Login() {
     setPendingPhone(digits);
     router.push('/pin');
   }
+
+  if (user) return <Redirect href="/routes" />;
 
   return (
     <KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>

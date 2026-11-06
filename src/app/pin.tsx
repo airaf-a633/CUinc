@@ -9,7 +9,7 @@ import { colors, layout } from '@/theme/tokens';
 
 export default function EnterPin() {
   const phone = getPendingPhone();
-  const { signIn } = useAuth();
+  const { user, signIn } = useAuth();
   const [pin, setPin] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -25,8 +25,7 @@ export default function EnterPin() {
     const result = await signIn(phone, pin);
     setBusy(false);
     if (result.ok) {
-      clearPendingPhone();
-      router.replace('/routes');
+      clearPendingPhone(); // the redirect below moves on to /routes
     } else if (result.reason === 'wrong_pin') {
       setError('Incorrect PIN'); // not in the designs: our wording
       setPin('');
@@ -35,6 +34,7 @@ export default function EnterPin() {
     }
   }
 
+  if (user) return <Redirect href="/routes" />;
   // Opened directly (e.g. page refresh) without a phone number: go back to Login.
   if (!phone) return <Redirect href="/login" />;
 

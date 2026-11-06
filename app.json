@@ -17,7 +17,7 @@
       "package": "com.cuinc.liftstation"
     },
     "web": {
-      "output": "single",
+      "output": "static",
       "bundler": "metro",
       "favicon": "./assets/images/favicon.png"
     },

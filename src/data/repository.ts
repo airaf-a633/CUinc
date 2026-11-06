@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import { nationalDigits } from './format';
 import { addresses as seedAddresses, routes as seedRoutes, users as seedUsers } from './seed';
 import type { Address, AuthResult, TurnOnRoute, User } from './types';
 
@@ -48,7 +49,7 @@ async function loadAddresses(): Promise<Address[]> {
   return memory;
 }
 
-export const normalizePhone = (value: string) => value.replace(/\D/g, '');
+export const normalizePhone = nationalDigits;
 
 export const repository: Repository = {
   async getSession() {

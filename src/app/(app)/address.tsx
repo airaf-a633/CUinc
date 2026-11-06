@@ -1,6 +1,6 @@
 import { useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { ActivityIndicator, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { ActivityIndicator, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, View, useWindowDimensions } from 'react-native';
 
 import { BackButton, PrimaryButton, TopInset, noOutline, text } from '@/components/ui';
 import { formatActivityDate } from '@/data/format';
@@ -16,6 +16,8 @@ export default function AddressDetail() {
   const [notes, setNotes] = useState('');
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { height: windowHeight } = useWindowDimensions();
+  const [headerHeight, setHeaderHeight] = useState(315);
 
   useEffect(() => {
     repository.getAddress(id ?? '').then((a) => {
@@ -54,6 +56,9 @@ export default function AddressDetail() {
   }
 
   const done = address.status === 'turned_on';
+  // Design: 292 px notes box with the button right below it. On short screens the box shrinks
+  // (down to 140 px) so "Mark as Turned On" stays on screen without scrolling.
+  const notesHeight = Math.max(140, Math.min(292, windowHeight - headerHeight - 29 - 20 - layout.buttonHeight - 24));
   const rows: [string, string][] = [
     ['Address 1:', address.line1],
     ['Address 2:', address.line2],
@@ -65,7 +70,7 @@ export default function AddressDetail() {
   return (
     <KeyboardAvoidingView style={styles.screen} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={styles.scroll}>
-        <View style={styles.header}>
+        <View style={styles.header} onLayout={(e) => setHeaderHeight(e.nativeEvent.layout.height)}>
           <TopInset extra={24} />
           <BackButton />
           <View style={styles.rows}>
@@ -101,7 +106,7 @@ export default function AddressDetail() {
                 onChangeText={setNotes}
                 multiline
                 textAlignVertical="top"
-                style={styles.notes}
+                style={[styles.notes, { height: notesHeight }]}
               />
               {error ? (
                 <Text accessibilityRole="alert" style={styles.error}>
@@ -128,7 +133,6 @@ const styles = StyleSheet.create({
   value: { fontFamily: fonts.bold, fontSize: 14, lineHeight: 19, color: colors.text, flexShrink: 1, textAlign: 'right', marginLeft: 16 },
   body: { paddingHorizontal: layout.margin, paddingTop: 29 },
   notes: {
-    minHeight: 292,
     borderRadius: radius.card,
     backgroundColor: colors.inputFill,
     padding: 20,

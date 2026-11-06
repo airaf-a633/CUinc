@@ -29,9 +29,15 @@ export function formatActivityDate(iso: string): string {
   return `${MONTHS[d.getMonth()]} ${ordinal(d.getDate())}, ${d.getFullYear()} at ${hour12}:${m} ${h < 12 ? 'AM' : 'PM'}`;
 }
 
+/** US national number: digits only, a leading country code 1 (from paste/autofill) is dropped. */
+export function nationalDigits(input: string): string {
+  const all = input.replace(/\D/g, '');
+  return (all.length > 10 && all[0] === '1' ? all.slice(1) : all).slice(0, 10);
+}
+
 /** "(912)555-5555" while typing, matching the Login design. */
 export function formatPhone(input: string): string {
-  const d = input.replace(/\D/g, '').slice(0, 10);
+  const d = nationalDigits(input);
   if (d.length === 0) return '';
   if (d.length <= 3) return `(${d}`;
   if (d.length <= 6) return `(${d.slice(0, 3)})${d.slice(3)}`;
