@@ -103,6 +103,10 @@ export const text = StyleSheet.create({
   muted: { fontFamily: fonts.regular, fontSize: 14, color: colors.muted },
 });
 
+// iOS Safari zooms the whole page when a text field with a font size under 16px is focused,
+// so fields are 16px on the web (14px on native, closer to the design).
+export const inputFontSize = Platform.OS === 'web' ? 16 : 14;
+
 // Browsers draw a default focus rectangle inside the rounded field; the design has none.
 // (react-native-web accepts outlineStyle 'none'; the React Native typings only list solid/dotted/dashed.)
 export const noOutline = (Platform.OS === 'web' ? { outlineStyle: 'none' } : {}) as TextStyle;
@@ -127,6 +131,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   inputError: { borderColor: colors.error, backgroundColor: colors.white },
-  inputText: { flex: 1, fontFamily: fonts.regular, fontSize: 14, color: colors.text, height: '100%', ...noOutline },
+  inputText: { flex: 1, fontFamily: fonts.regular, fontSize: inputFontSize, color: colors.text, height: '100%', ...noOutline },
   errorText: { fontFamily: fonts.regular, fontSize: 12, lineHeight: 18, color: colors.error, marginTop: 9, marginLeft: 2 },
 });

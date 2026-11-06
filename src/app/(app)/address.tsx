@@ -2,7 +2,7 @@ import { useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, View, useWindowDimensions } from 'react-native';
 
-import { BackButton, PrimaryButton, TopInset, noOutline, text } from '@/components/ui';
+import { BackButton, PrimaryButton, TopInset, inputFontSize, noOutline, text } from '@/components/ui';
 import { formatActivityDate } from '@/data/format';
 import { repository } from '@/data/repository';
 import type { Address } from '@/data/types';
@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.inputFill,
     padding: 20,
     fontFamily: fonts.regular,
-    fontSize: 14,
+    fontSize: inputFontSize,
     color: colors.text,
     ...noOutline,
   },
