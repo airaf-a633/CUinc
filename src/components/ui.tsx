@@ -2,12 +2,14 @@ import { router } from 'expo-router';
 import React from 'react';
 import {
   ActivityIndicator,
+  Platform,
   Pressable,
   StyleSheet,
   Text,
   TextInput,
   View,
   type TextInputProps,
+  type TextStyle,
   type ViewStyle,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -65,7 +67,9 @@ export function BackButton({ onPress }: { onPress?: () => void }) {
 /** Top safe-area spacer so content clears the notch/status bar on iOS and Android. */
 export function TopInset({ extra = 0 }: { extra?: number }) {
   const insets = useSafeAreaInsets();
-  return <View style={{ height: insets.top + extra }} />;
+  // Browsers report no top inset; keep a small gap so web matches the design's status-bar space.
+  const top = Platform.OS === 'web' ? Math.max(insets.top, 32) : insets.top;
+  return <View style={{ height: top + extra }} />;
 }
 
 export function Field({
@@ -93,11 +97,15 @@ export function Field({
 }
 
 export const text = StyleSheet.create({
-  title: { fontFamily: fonts.black, fontSize: 28, lineHeight: 36, color: colors.text },
-  subtitle: { fontFamily: fonts.regular, fontSize: 16, color: colors.muted },
-  body: { fontFamily: fonts.regular, fontSize: 15, lineHeight: 22, color: colors.text },
+  title: { fontFamily: fonts.black, fontSize: 26, lineHeight: 42, color: colors.text },
+  subtitle: { fontFamily: fonts.regular, fontSize: 14, lineHeight: 20, color: colors.muted, marginTop: 2 },
+  body: { fontFamily: fonts.regular, fontSize: 14, lineHeight: 20, color: colors.text },
   muted: { fontFamily: fonts.regular, fontSize: 14, color: colors.muted },
 });
+
+// Browsers draw a default focus rectangle inside the rounded field; the design has none.
+// (react-native-web accepts outlineStyle 'none'; the React Native typings only list solid/dotted/dashed.)
+export const noOutline = (Platform.OS === 'web' ? { outlineStyle: 'none' } : {}) as TextStyle;
 
 const styles = StyleSheet.create({
   button: {
@@ -106,7 +114,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  buttonLabel: { fontFamily: fonts.bold, fontSize: 16, color: colors.white },
+  buttonLabel: { fontFamily: fonts.semibold, fontSize: 14, color: colors.white },
   back: { alignSelf: 'flex-start', paddingVertical: 8 },
   input: {
     height: layout.inputHeight,
@@ -119,6 +127,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   inputError: { borderColor: colors.error, backgroundColor: colors.white },
-  inputText: { flex: 1, fontFamily: fonts.regular, fontSize: 16, color: colors.text, height: '100%' },
-  errorText: { fontFamily: fonts.regular, fontSize: 13, color: colors.error, marginTop: 8, marginLeft: 2 },
+  inputText: { flex: 1, fontFamily: fonts.regular, fontSize: 14, color: colors.text, height: '100%', ...noOutline },
+  errorText: { fontFamily: fonts.regular, fontSize: 12, lineHeight: 18, color: colors.error, marginTop: 9, marginLeft: 2 },
 });

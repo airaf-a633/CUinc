@@ -36,7 +36,7 @@ export default function Login() {
   return (
     <KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={styles.content}>
-        <TopInset extra={32} />
+        <TopInset extra={8} />
         <DropletLogo />
         <Text style={[text.title, styles.title]}>Welcome</Text>
         <Text style={text.subtitle}>Sign in to continue</Text>
@@ -66,7 +66,7 @@ export default function Login() {
 const styles = StyleSheet.create({
   flex: { flex: 1, backgroundColor: colors.background },
   content: { paddingHorizontal: layout.margin, paddingBottom: 24 },
-  title: { marginTop: 56, fontSize: 32 },
-  form: { marginTop: 50 },
-  button: { marginTop: 24 },
+  title: { marginTop: 42 },
+  form: { marginTop: 48 },
+  button: { marginTop: 30 },
 });

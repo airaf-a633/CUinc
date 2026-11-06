@@ -41,7 +41,7 @@ export default function EnterPin() {
   return (
     <KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={styles.content}>
-        <TopInset extra={24} />
+        <TopInset extra={8} />
         <BackButton />
         <Text style={[text.title, styles.title]}>Enter Pin</Text>
         <Text style={text.subtitle}>Confirm your PIN code</Text>
@@ -72,7 +72,7 @@ export default function EnterPin() {
 const styles = StyleSheet.create({
   flex: { flex: 1, backgroundColor: colors.background },
   content: { paddingHorizontal: layout.margin, paddingBottom: 24 },
-  title: { marginTop: 56, fontSize: 32 },
-  form: { marginTop: 50 },
-  button: { marginTop: 24 },
+  title: { marginTop: 48 },
+  form: { marginTop: 48 },
+  button: { marginTop: 30 },
 });

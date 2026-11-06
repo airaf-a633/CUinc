@@ -1,7 +1,8 @@
 import { router } from 'expo-router';
-import { useEffect, useState } from 'react';
-import { ActivityIndicator, Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useCallback, useEffect, useState } from 'react';
+import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
+import { SideDrawer } from '@/components/drawer';
 import { MenuIcon } from '@/components/icons';
 import { TopInset, text } from '@/components/ui';
 import { repository } from '@/data/repository';
@@ -15,21 +16,24 @@ export default function Routes() {
   const online = useOnline();
   const [routes, setRoutes] = useState<TurnOnRoute[] | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
+  const closeMenu = useCallback(() => setMenuOpen(false), []);
 
   useEffect(() => {
     repository.listRoutes().then(setRoutes);
   }, []);
 
+  async function handleSignOut() {
+    setMenuOpen(false);
+    await signOut();
+    router.replace('/');
+  }
+
   return (
     <View style={styles.screen}>
       <ScrollView contentContainerStyle={styles.content}>
-        <TopInset extra={24} />
+        <TopInset extra={34} />
         <View style={styles.topRow}>
-          <Pressable
-            accessibilityRole="button"
-            accessibilityLabel="Open menu"
-            hitSlop={16}
-            onPress={() => setMenuOpen(true)}>
+          <Pressable accessibilityRole="button" accessibilityLabel="Open menu" hitSlop={16} onPress={() => setMenuOpen(true)}>
             <MenuIcon />
           </Pressable>
           <Text style={styles.user} numberOfLines={1}>
@@ -37,7 +41,7 @@ export default function Routes() {
           </Text>
         </View>
 
-        <Text style={[text.title, styles.title]}>Consolidated Utilities, Inc.</Text>
+        <Text style={[text.title, styles.title]}>{'Consolidated\nUtilities, Inc.'}</Text>
 
         <View style={styles.sectionRow}>
           <Text style={text.muted}>Turn Ons</Text>
@@ -65,22 +69,7 @@ export default function Routes() {
         )}
       </ScrollView>
 
-      <Modal transparent animationType="fade" visible={menuOpen} onRequestClose={() => setMenuOpen(false)}>
-        <Pressable style={styles.backdrop} onPress={() => setMenuOpen(false)}>
-          <View style={styles.sheet}>
-            <Pressable
-              accessibilityRole="button"
-              onPress={async () => {
-                setMenuOpen(false);
-                await signOut();
-                router.replace('/');
-              }}
-              style={styles.sheetItem}>
-              <Text style={styles.sheetText}>Sign out</Text>
-            </Pressable>
-          </View>
-        </Pressable>
-      </Modal>
+      <SideDrawer open={menuOpen} onClose={closeMenu} user={user} onSignOut={handleSignOut} />
     </View>
   );
 }
@@ -90,16 +79,12 @@ const styles = StyleSheet.create({
   content: { paddingHorizontal: layout.margin, paddingBottom: 32 },
   topRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   user: { fontFamily: fonts.regular, fontSize: 14, color: colors.muted, flexShrink: 1, marginLeft: 16 },
-  title: { marginTop: 40 },
-  sectionRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 28, marginBottom: 18 },
+  title: { marginTop: 30 },
+  sectionRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 29, marginBottom: 31 },
   status: { flexDirection: 'row', alignItems: 'center' },
   dot: { width: 8, height: 8, borderRadius: 4, marginRight: 8 },
   statusText: { fontFamily: fonts.regular, fontSize: 14 },
   loader: { marginTop: 40 },
   card: { height: 96, borderRadius: radius.card, alignItems: 'center', justifyContent: 'center', marginBottom: 14 },
   cardLabel: { fontFamily: fonts.bold, fontSize: 20, color: colors.text },
-  backdrop: { flex: 1, backgroundColor: colors.overlay, justifyContent: 'flex-start', alignItems: 'flex-start' },
-  sheet: { marginTop: 90, marginLeft: layout.margin, backgroundColor: colors.white, borderRadius: radius.card, paddingVertical: 8, minWidth: 180 },
-  sheetItem: { paddingVertical: 14, paddingHorizontal: 20 },
-  sheetText: { fontFamily: fonts.semibold, fontSize: 16, color: colors.text },
 });

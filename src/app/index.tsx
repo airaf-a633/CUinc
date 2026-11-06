@@ -30,15 +30,15 @@ export default function Splash() {
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.primary, justifyContent: 'center', paddingHorizontal: 30 },
   center: { alignItems: 'center' },
-  title: { fontFamily: fonts.black, fontSize: 30, color: colors.white, marginTop: 40, textAlign: 'center' },
+  title: { fontFamily: fonts.black, fontSize: 27, color: colors.white, marginTop: 34, textAlign: 'center' },
   tagline: {
     fontFamily: fonts.regular,
-    fontSize: 16,
-    lineHeight: 22,
+    fontSize: 14.5,
+    lineHeight: 20,
     color: colors.white,
     textAlign: 'center',
     marginTop: 28,
     maxWidth: 260,
   },
-  button: { alignSelf: 'stretch', marginTop: 56 },
+  button: { alignSelf: 'stretch', marginTop: 76 },
 });

@@ -2,7 +2,7 @@ import { useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 
-import { BackButton, PrimaryButton, TopInset, text } from '@/components/ui';
+import { BackButton, PrimaryButton, TopInset, noOutline, text } from '@/components/ui';
 import { formatActivityDate } from '@/data/format';
 import { repository } from '@/data/repository';
 import type { Address } from '@/data/types';
@@ -121,24 +121,25 @@ const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.background },
   center: { flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.background, padding: layout.margin },
   scroll: { paddingBottom: 32 },
-  header: { backgroundColor: colors.headerTint, paddingHorizontal: layout.margin, paddingBottom: 28 },
-  rows: { marginTop: 18, gap: 18 },
+  header: { backgroundColor: colors.headerTint, paddingHorizontal: layout.margin, paddingBottom: 30 },
+  rows: { marginTop: 21, gap: 21 },
   row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'baseline' },
-  label: { fontFamily: fonts.regular, fontSize: 15, color: colors.text },
-  value: { fontFamily: fonts.bold, fontSize: 15, color: colors.text, flexShrink: 1, textAlign: 'right', marginLeft: 16 },
-  body: { paddingHorizontal: layout.margin, paddingTop: 28 },
+  label: { fontFamily: fonts.regular, fontSize: 14, lineHeight: 19, color: colors.text },
+  value: { fontFamily: fonts.bold, fontSize: 14, lineHeight: 19, color: colors.text, flexShrink: 1, textAlign: 'right', marginLeft: 16 },
+  body: { paddingHorizontal: layout.margin, paddingTop: 29 },
   notes: {
     minHeight: 292,
     borderRadius: radius.card,
     backgroundColor: colors.inputFill,
     padding: 20,
     fontFamily: fonts.regular,
-    fontSize: 15,
+    fontSize: 14,
     color: colors.text,
+    ...noOutline,
   },
   error: { fontFamily: fonts.regular, fontSize: 13, color: colors.error, marginTop: 10 },
   button: { marginTop: 20 },
-  sectionLabel: { fontFamily: fonts.regular, fontSize: 15, color: colors.muted, marginBottom: 10 },
+  sectionLabel: { fontFamily: fonts.regular, fontSize: 14, color: colors.muted, marginBottom: 10 },
   activityLabel: { marginTop: 32 },
   turnedOn: { fontFamily: fonts.bold, color: colors.online },
 });

@@ -1,22 +1,30 @@
+import { useId } from 'react';
 import Svg, { Defs, Ellipse, Path, RadialGradient, Stop } from 'react-native-svg';
 
 import { colors } from '@/theme/tokens';
 
-// Icons are redrawn from the SVGs exported from Figma (assets/svg). Radial gradients use
-// rx/ry instead of gradientTransform so they render identically on native and web.
+// Icons are redrawn from the SVGs exported from Figma (assets/svg). The Figma gradients are
+// ellipses defined with gradientTransform; here they are converted to bounding-box percentages
+// (cx/cy/r) because rx/ry are ignored by browsers and gradientTransform is unreliable on native.
+
+// Gradient ids must be unique per instance: screens stay mounted (hidden) in the stack, and a
+// hidden <svg> that defines the same id makes url(#id) fail for the visible one.
+const useUid = () => useId().replace(/[^a-zA-Z0-9]/g, '');
 
 export function DropletLogo({ width = 25, height = 35 }: { width?: number; height?: number }) {
+  const uid = useUid();
+  const gid = `drop${uid}`;
   return (
     <Svg width={width} height={height} viewBox="0 0 25 35" fill="none">
       <Defs>
-        <RadialGradient id="drop" cx="20.638" cy="-1.22" rx="35.4352" ry="51.2045" gradientUnits="userSpaceOnUse">
+        <RadialGradient id={gid} cx="85.3%" cy="-4%" r="147.6%">
           <Stop offset="0" stopColor="#FFFFFF" />
           <Stop offset="1" stopColor={colors.primary} />
         </RadialGradient>
       </Defs>
       <Path
         d="M24.1658 23.4881C23.7034 29.9125 18.4666 34.8836 12.1611 34.8836C5.85572 34.8836 0.61889 29.9125 0.156511 23.4881C0.091696 16.7151 12.1287 0.189453 12.1287 0.189453C12.1287 0.189453 24.1658 16.7151 24.1658 23.4881Z"
-        fill="url(#drop)"
+        fill={`url(#${gid})`}
       />
     </Svg>
   );
@@ -24,21 +32,24 @@ export function DropletLogo({ width = 25, height = 35 }: { width?: number; heigh
 
 /** Splash logo: droplet inside a rounded square (cleaned of the stray frame shapes in the export). */
 export function SplashLogo({ size = 77 }: { size?: number }) {
+  const uid = useUid();
+  const sq = `sq${uid}`;
+  const sd = `sd${uid}`;
   return (
     <Svg width={size} height={size} viewBox="0 0 77 77" fill="none">
       <Defs>
-        <RadialGradient id="sq" cx="36.9848" cy="48.1635" rx="45.5489" ry="46.6877" gradientUnits="userSpaceOnUse">
+        <RadialGradient id={sq} cx="49.07%" cy="62.55%" r="60.63%">
           <Stop offset="0" stopColor="#FFFFFF" />
           <Stop offset="1" stopColor={colors.primary} />
         </RadialGradient>
-        <RadialGradient id="sd" cx="49.1934" cy="12.4609" rx="47.9153" ry="69.4674" gradientUnits="userSpaceOnUse">
+        <RadialGradient id={sd} cx="85.35%" cy="-4.06%" r="147.4%">
           <Stop offset="0" stopColor="#FFFFFF" />
           <Stop offset="1" stopColor={colors.primary} />
         </RadialGradient>
       </Defs>
       <Path
         d="M0.125 9.6C0.125 4.29807 4.42307 0 9.725 0H65.647C70.9489 0 75.2469 4.29807 75.2469 9.6V67.4C75.2469 72.7019 70.9489 77 65.6469 77H9.72498C4.42305 77 0.125 72.7019 0.125 67.4V9.6Z"
-        fill="url(#sq)"
+        fill={`url(#${sq})`}
       />
       <Path
         fillRule="evenodd"
@@ -48,7 +59,7 @@ export function SplashLogo({ size = 77 }: { size?: number }) {
       />
       <Path
         d="M53.9636 45.9815C53.3384 54.6973 46.2572 61.4415 37.731 61.4415C29.2048 61.4415 22.1236 54.6973 21.4984 45.9815C21.4108 36.7929 37.6872 14.373 37.6872 14.373C37.6872 14.373 53.9636 36.7929 53.9636 45.9815Z"
-        fill="url(#sd)"
+        fill={`url(#${sd})`}
       />
     </Svg>
   );
